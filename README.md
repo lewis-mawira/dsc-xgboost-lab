@@ -1,197 +1,52 @@
-# XGBoost - Lab
+# Customer Churn Prediction for GNB Bank
 
-## Introduction
+**1. Project Overview:**
 
-In this lab, we'll install the popular [XGBoost](http://xgboost.readthedocs.io/en/latest/index.html) library and explore how to use this popular boosting model to classify different types of wine using the [Wine Quality Dataset](https://archive.ics.uci.edu/ml/datasets/wine+quality) from the UCI Machine Learning Dataset Repository.  
+The Customer Churn Prediction project for GNB Bank aims to harness the power of machine learning to predict customer churn. Customer churn, or the rate at which customers discontinue their services, is a critical concern for GNB Bank. The project delves into a comprehensive analysis of customer data, explores key features affecting churn, builds predictive models, and provides actionable insights to optimize customer retention strategies.
 
-## Objectives
+**2. Business Context:**
 
-You will be able to:
+Understanding and mitigating customer churn holds paramount significance for GNB Bank. It directly impacts the bank's revenue and operational costs. By preventing customer churn, GNB Bank can reduce customer acquisition expenses and maintain long-term profitability. Moreover, enhancing customer retention cultivates a positive brand image and sustains competitive advantage in the dynamic financial industry.
 
-- Fit, tune, and evaluate an XGBoost algorithm
+**3. Problem Statement:**
 
-## Installing XGBoost
+The core challenge is to develop a reliable predictive model capable of identifying customers who are likely to churn. This predictive power will enable GNB Bank to allocate resources effectively, tailor strategies for at-risk customers, and implement initiatives that foster customer loyalty.
 
-Run this lab on your local computer.
+**4. Objectives:**
 
-The XGBoost model is not currently included in scikit-learn, so we'll have to install it on our own.  To install XGBoost, you'll need to use `pip`. 
+   **a)** Analyze historical customer data to uncover patterns and insights.
+   **b)** Develop accurate predictive models to anticipate customer churn.
+   **c)** Identify key factors influencing churn behavior.
+   **d)** Deliver actionable recommendations to enhance customer retention.
+   
+**5. Data and Methodology:**
 
-To install XGBoost, follow these steps:
+**Exploratory Data Analysis (EDA):**
 
-1. Open up a new terminal window 
-2. Activate your conda environment
-3. Run `pip install xgboost`
-4. Once the installation has completed, run the cell below to verify that everything worked 
+The project commences with exploratory analysis to comprehend the dataset's structure and characteristics. EDA helps reveal trends, patterns, and potential correlations among features.
 
+**Data Preprocessing:** Missing values are handled, categorical variables are encoded, and features are scaled for consistent model performance.
 
-```python
-from xgboost import XGBClassifier
-```
+**Feature Importance Analysis:** Utilizing SHAP values, the project identifies influential features contributing to customer churn. This step unveils critical insights into customer behavior.
 
-Run the cell below to import everything we'll need for this lab. 
+**Model Building and Evaluation:** Multiple models, including Decision Trees, Random Forests, and XGBoost, are developed and evaluated. Metrics such as accuracy, F1-score, precision, recall, and AUC-ROC are used to gauge model performance.
 
+**Interpretation and Recommendations:** The model outcomes are interpreted to extract actionable insights. The project provides specific recommendations for GNB Bank to implement targeted strategies and interventions for at-risk customers.
 
-```python
-import pandas as pd
-import numpy as np
-np.random.seed(0)
-import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import GridSearchCV
-from sklearn.preprocessing import LabelEncoder
-import warnings
-warnings.filterwarnings('ignore')
-%matplotlib inline
-```
+**6. Conclusion and Impact:**
 
-### Loading the Data
+By predicting customer churn accurately, GNB Bank can proactively address potential churners and tailor retention strategies. This will lead to increased customer satisfaction, improved brand loyalty, and enhanced profitability. The project's insights will equip GNB Bank with data-driven decision-making capabilities, ensuring a stronger competitive edge in the financial industry.
 
-The dataset we'll be using for this lab is currently stored in the file `'winequality-red.csv'`.  
+**7. Dataset Overview:**
 
-In the cell below, use pandas to import the dataset into a dataframe, and inspect the `.head()` of the dataframe to ensure everything loaded correctly. 
+The dataset contains 9970 rows and 14 columns, encompassing a variety of customer attributes. Features include credit score, geography, gender, age, tenure, balance, number of products, credit card ownership, active membership status, estimated salary, and the target variable 'Exited,' indicating customer churn.
 
+**8. Future Enhancements:**
 
-```python
-df = None
-```
+Future iterations of this project could involve more advanced techniques, such as ensemble methods and deep learning, to further enhance churn prediction accuracy. Additionally, integrating external data sources and real-time feedback loops could provide richer insights for continuous improvement of customer retention strategies.
 
-For this lab, our target column will be `'quality'`.  That makes this a multiclass classification problem. Given the data in the columns from `'fixed_acidity'` through `'alcohol'`, we'll predict the quality of the wine.  
+**9. Acknowledgments:**
 
-This means that we need to store our target variable separately from the dataset, and then split the data and labels into training and test sets that we can use for cross-validation. 
+We acknowledge the importance of this project for GNB Bank and appreciate the opportunity to contribute insights and solutions to the challenge of customer churn prediction. Our aim is to drive positive impact by enabling proactive decision-making and strategic planning in customer retention efforts.
 
-### Splitting the Data
-
-In the cell below:
-
-- Assign the `'quality'` column to `y` 
-- Drop this column (`'quality'`) and assign the resulting DataFrame to `X` 
-- Split the data into training and test sets. Set the `random_state` to 42   
-
-
-```python
-y = None
-X = None
-
-X_train, X_test, y_train, y_test = None
-```
-
-### Preprocessing the Data
-
-These are the current target values:
-
-
-```python
-y_train.value_counts().sort_index()
-```
-
-XGBoost requires that classification categories be integers that count up from 0, not starting at 3. Therefore you should instantiate a `LabelEncoder` ([documentation here](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.LabelEncoder.html)) and convert both `y_train` and `y_test` into arrays containing label encoded values (i.e. integers that count up from 0).
-
-
-```python
-# Instantiate the encoder
-encoder = None
-
-# Fit and transform the training data
-
-
-# Transform the test data
-
-```
-
-Confirm that the new values start at 0 instead of 3:
-
-
-```python
-# Your code here to inspect the values of y_train and y_test
-
-```
-
-### Building an XGBoost Model
-
-Now that you have prepared the data for modeling, you can use XGBoost to build a model that can accurately classify wine quality based on the features of the wine!
-
-The API for `xgboost` is purposefully written to mirror the same structure as other models in scikit-learn.  
-
-
-```python
-# Instantiate XGBClassifier
-clf = None
-
-# Fit XGBClassifier
-
-
-# Predict on training and test sets
-training_preds = None
-test_preds = None
-
-# Accuracy of training and test sets
-training_accuracy = None
-test_accuracy = None
-
-print('Training Accuracy: {:.4}%'.format(training_accuracy * 100))
-print('Validation accuracy: {:.4}%'.format(test_accuracy * 100))
-```
-
-## Tuning XGBoost
-
-The model had a somewhat lackluster performance on the test set compared to the training set, suggesting the model is beginning to overfit to the training data. Let's tune the model to increase the model performance and prevent overfitting. 
-
-You've already encountered a lot of parameters when working with Decision Trees, Random Forests, and Gradient Boosted Trees.
-
-For a full list of model parameters, see the [XGBoost Documentation](http://xgboost.readthedocs.io/en/latest/parameter.html).
-
-Examine the tunable parameters for XGboost, and then fill in appropriate values for the `param_grid` dictionary in the cell below. 
-
-**_NOTE:_** Remember, `GridSearchCV` finds the optimal combination of parameters through an exhaustive combinatoric search.  If you search through too many parameters, the model will take forever to run! To ensure your code runs in sufficient time, we restricted the number of values the parameters can take.  
-
-
-```python
-param_grid = {
-    'learning_rate': [0.1, 0.2],
-    'max_depth': [6],
-    'min_child_weight': [1, 2],
-    'subsample': [0.5, 0.7],
-    'n_estimators': [100],
-}
-```
-
-Now that we have constructed our `params` dictionary, create a `GridSearchCV` object in the cell below and use it to iteratively tune our XGBoost model.  
-
-Now, in the cell below:
-
-* Create a `GridSearchCV` object. Pass in the following parameters:
-    * `clf`, the classifier
-    * `param_grid`, the dictionary of parameters we're going to grid search through
-    * `scoring='accuracy'`
-    * `cv=None`
-    * `n_jobs=1`
-* Fit our `grid_clf` object and pass in `X_train` and `y_train`
-* Store the best parameter combination found by the grid search in `best_parameters`. You can find these inside the grid search object's `.best_params_` attribute 
-* Use `grid_clf` to create predictions for the training and test sets, and store them in separate variables 
-* Compute the accuracy score for the training and test predictions  
-
-
-```python
-grid_clf = None
-grid_clf.fit(None, None)
-
-best_parameters = None
-
-print('Grid Search found the following optimal parameters: ')
-for param_name in sorted(best_parameters.keys()):
-    print('%s: %r' % (param_name, best_parameters[param_name]))
-
-training_preds = None
-test_preds = None
-training_accuracy = None
-test_accuracy = None
-
-print('')
-print('Training Accuracy: {:.4}%'.format(training_accuracy * 100))
-print('Validation accuracy: {:.4}%'.format(test_accuracy * 100))
-```
-
-## Summary
-
-Great! You've now successfully made use of one of the most powerful boosting models in data science for modeling.  We've also learned how to tune the model for better performance using the grid search methodology we learned previously. XGBoost is a powerful modeling tool to have in your arsenal. Don't be afraid to experiment with it! 
+**10. Contributors Information:**
